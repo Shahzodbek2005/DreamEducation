@@ -11,12 +11,12 @@ import java.util.List;
 
 @Configuration
 public class HttpTraceActuatorConfiguration {
+
     @Autowired
     TraceService traceService;
+
     @Bean
     public HttpTraceRepository httpTraceRepository() {
-
-
         return new HttpTraceRepository() {
             @Override
             public List<HttpTrace> findAll() {
@@ -25,13 +25,13 @@ public class HttpTraceActuatorConfiguration {
 
             @Override
             public void add(HttpTrace trace) {
-                if (!trace.getRequest().getUri().getPath().contains("actuator")) {
+                if (!trace.getRequest().getUri().getPath().contains("management")) {
                     String getPrincipalName = trace.getPrincipal() == null ? null : trace.getPrincipal().getName();
                     String getSessionName = trace.getSession() == null ? null : trace.getSession().getId();
                     traceService.add(
                             trace.getRequest().getMethod(),
                             trace.getResponse().getStatus(),
-                            (trace.getRequest().getUri().getAuthority() + trace.getRequest().getUri().getPath()),
+                            ("http://" + trace.getRequest().getUri().getAuthority() + trace.getRequest().getUri().getPath()),
                             trace.getTimestamp(),
                             trace.getTimeTaken(),
                             getPrincipalName,
@@ -45,4 +45,5 @@ public class HttpTraceActuatorConfiguration {
             }
         };
     }
+
 }

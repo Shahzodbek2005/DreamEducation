@@ -1,10 +1,13 @@
+
 package com.bluebird.DreamEducation.entities;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
 @Table(name = "httpTrace")
+@JsonIgnoreProperties(value = {"count"})
 public class TraceModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
